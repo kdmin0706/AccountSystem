@@ -35,11 +35,7 @@ public class AccountService {
 
         AccountUser accountUser = getAccountUser(userId);
 
-        String randomAccountNumber = createRandomAccountNumber();   //임의의 10자리 계좌번호 생성
-
-        String newAccountNumber = accountRepository.findFirstByOrderByIdDesc()
-                .map(account -> (Integer.parseInt(account.getAccountNumber())) + 1 + "")
-                .orElse(randomAccountNumber);
+        String newAccountNumber = getNewAccountNumber();  //accountNumber 랜덤 10자리 계좌 생성
 
         validateCreateAccount(accountUser, newAccountNumber);
 
@@ -53,12 +49,20 @@ public class AccountService {
                         .build())
         );
     }
+
+    private String getNewAccountNumber() {
+        return accountRepository.findFirstByOrderByIdDesc()
+                .map(account -> (Integer.parseInt(account.getAccountNumber())) + 1 + "")
+                .orElse(createRandomAccountNumber());
+    }
+
     private String createRandomAccountNumber() {
         Random random = new Random();
         StringBuilder stringBuilder = new StringBuilder();
 
+        //시중 은행에서 0부터 시작하는 계좌번호도 있기 때문에 전체 랜덤 사용
         for (int i = 0; i < 10; i++) {
-            stringBuilder.append(Integer.toString(random.nextInt(9)));
+            stringBuilder.append(Integer.toString(random.nextInt(10)));
         }
 
         return stringBuilder.toString();
