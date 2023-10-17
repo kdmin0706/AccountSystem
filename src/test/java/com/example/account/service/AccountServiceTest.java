@@ -258,7 +258,7 @@ class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("계좌 번호 이미 사용 중입니다")
+    @DisplayName("계좌 번호 중복 체크")
     void createAccount_AccountNumberAlreadyUse() {
         //given
         AccountUser user = AccountUser.builder()
