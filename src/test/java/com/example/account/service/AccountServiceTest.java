@@ -258,6 +258,46 @@ class AccountServiceTest {
     }
 
     @Test
+    @DisplayName("계좌 번호 이미 사용 중입니다")
+    void createAccount_AccountNumberAlreadyUse() {
+        //given
+        AccountUser user = AccountUser.builder()
+                .name("user")
+                .build();
+        user.setId(15L);
+
+        AccountUser otherUser = AccountUser.builder()
+                .name("other")
+                .build();
+        otherUser.setId(12L);
+
+        given(accountUserRepository.findById(anyLong()))
+                .willReturn(Optional.of(user));
+        given(accountRepository.findByAccountNumber(anyString()))
+                .willReturn(Optional.of(Account.builder()
+                        .accountUser(user)
+                        .balance(100L)
+                        .accountNumber("1234567890")
+                        .build()));
+
+        given(accountUserRepository.findById(anyLong()))
+                .willReturn(Optional.of(otherUser));
+        given(accountRepository.findByAccountNumber(anyString()))
+                .willReturn(Optional.of(Account.builder()
+                        .accountUser(otherUser)
+                        .balance(200L)
+                        .accountNumber("1234567890")
+                        .build()));
+
+        //when
+        AccountException accountException = assertThrows(AccountException.class,
+                () -> accountService.createAccount(1L, 1000L));
+
+        //then
+        assertEquals(ErrorCode.ACCOUNT_NUMBER_ALREADY_USE, accountException.getErrorCode());
+    }
+
+    @Test
     @DisplayName("계좌 조회 성공")
     void testXXX() {
         //given
@@ -290,6 +330,7 @@ class AccountServiceTest {
         //then
         assertEquals("Minus", exception.getMessage());
     }
+
 
     @Test
     @DisplayName("Test 이름 변경")
