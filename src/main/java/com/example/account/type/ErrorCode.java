@@ -19,7 +19,7 @@ public enum ErrorCode {
     USER_ACCOUNT_UN_MATCH("사용자가 계좌의 소유주와 다릅니다."),
     ACCOUNT_ALREADY_UNREGISTERED("계좌가 이미 해지되었습니다."),
     BALANCE_NOT_EMPTY("잔액이 있는 계좌는 해지할 수 없습니다."),
-    MAX_ACCOUNT_PER_USER_10("사용자 최대 계좌는 10개입니다.");
-
+    MAX_ACCOUNT_PER_USER_10("사용자 최대 계좌는 10개입니다."),
+    ACCOUNT_NUMBER_ALREADY_USE("해당 계좌번호는 이미 사용중입니다.");
     private final String description;
 }
