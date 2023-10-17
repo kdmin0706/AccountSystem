@@ -167,10 +167,10 @@ class AccountServiceTest {
         AccountUser user = AccountUser.builder()
                 .name("Pobi")
                 .build();
-        user.setId(15L);
+        user.setId(1L);
         given(accountUserRepository.findById(anyLong()))
                 .willReturn(Optional.of(user));
-        given(accountUserRepository.findById(anyLong()))
+        given(accountRepository.findByAccountNumber(anyString()))
                 .willReturn(Optional.empty());
 
         //when
