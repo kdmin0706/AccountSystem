@@ -59,7 +59,6 @@ public class AccountService {
         if (accountRepository.findByAccountNumber(newAccountNumber).isPresent()) {
             throw new AccountException(ACCOUNT_NUMBER_ALREADY_USE);
         }
-
         return newAccountNumber;
     }
 
