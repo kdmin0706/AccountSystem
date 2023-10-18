@@ -45,6 +45,7 @@ class TransactionServiceTest {
     private TransactionService transactionService;
 
     @Test
+    @DisplayName("잔액 사용 성공")
     void successUseBalance() {
         //given
         AccountUser user = AccountUser.builder()
@@ -130,7 +131,7 @@ class TransactionServiceTest {
     }
 
     @Test
-    @DisplayName("계좌 소유주 없음 - 잔액 사용 실패")
+    @DisplayName("계좌 소유주와 사용자 불일치 - 잔액 사용 실패")
     void deleteAccountFailed_userUnMatch() {
         //given
         AccountUser pobi = AccountUser.builder()
@@ -262,6 +263,7 @@ class TransactionServiceTest {
     }
 
     @Test
+    @DisplayName("잔액 사용 실패 성공")
     void successCancelBalance() {
         //given
         AccountUser user = AccountUser.builder()
@@ -488,6 +490,7 @@ class TransactionServiceTest {
     }
 
     @Test
+    @DisplayName("트랜잭션 성공")
     void successQueryTransaction() {
         //given
         AccountUser user = AccountUser.builder()
