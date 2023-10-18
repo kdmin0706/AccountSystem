@@ -34,10 +34,9 @@ public class AccountService {
     public AccountDto createAccount(Long userId, Long initialBalance) {
 
         AccountUser accountUser = getAccountUser(userId);
+        validateCreateAccount(accountUser);
 
         String newAccountNumber = getNewAccountNumber();  //accountNumber 랜덤 10자리 계좌 생성
-
-        validateCreateAccount(accountUser, newAccountNumber);
 
         return AccountDto.fromEntity(
                 accountRepository.save(Account.builder()
@@ -51,9 +50,17 @@ public class AccountService {
     }
 
     private String getNewAccountNumber() {
-        return accountRepository.findFirstByOrderByIdDesc()
+        //계좌 번호 생성
+        String newAccountNumber = accountRepository.findFirstByOrderByIdDesc()
                 .map(account -> (Integer.parseInt(account.getAccountNumber())) + 1 + "")
                 .orElse(createRandomAccountNumber());
+
+        //새로 생성한 계좌 번호가 이미 사용하고 있는 번호이면 에러 처리
+        if (accountRepository.findByAccountNumber(newAccountNumber).isPresent()) {
+            throw new AccountException(ACCOUNT_NUMBER_ALREADY_USE);
+        }
+
+        return newAccountNumber;
     }
 
     private String createRandomAccountNumber() {
@@ -68,15 +75,10 @@ public class AccountService {
         return stringBuilder.toString();
     }
 
-    private void validateCreateAccount(AccountUser accountUser, String accountNumber) {
+    private void validateCreateAccount(AccountUser accountUser) {
         //계좌번호가 10자리 정수가 넘어가면 에러 처리
         if (accountRepository.countByAccountUser(accountUser) >= 10) {
             throw new AccountException(MAX_ACCOUNT_PER_USER_10) ;
-        }
-
-        //새로 생성한 계좌 번호가 이미 사용하고 있는 지 체크
-        if (accountRepository.findByAccountNumber(accountNumber).isPresent()) {
-            throw new AccountException(ACCOUNT_NUMBER_ALREADY_USE);
         }
     }
 
