@@ -68,7 +68,7 @@ public class AccountService {
 
         //시중 은행에서 0부터 시작하는 계좌번호도 있기 때문에 전체 랜덤 사용
         for (int i = 0; i < 10; i++) {
-            stringBuilder.append(Integer.toString(random.nextInt(10)));
+            stringBuilder.append(random.nextInt(10));
         }
 
         return stringBuilder.toString();
