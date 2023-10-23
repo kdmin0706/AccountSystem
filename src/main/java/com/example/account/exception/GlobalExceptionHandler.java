@@ -12,7 +12,7 @@ import static com.example.account.type.ErrorCode.INVALID_REQUEST;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalException {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccountException.class)
     public ErrorResponse handleAccountException(AccountException e) {

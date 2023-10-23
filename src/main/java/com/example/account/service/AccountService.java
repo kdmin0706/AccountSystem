@@ -52,13 +52,14 @@ public class AccountService {
     private String getNewAccountNumber() {
         //계좌 번호 생성
         String newAccountNumber = accountRepository.findFirstByOrderByIdDesc()
-                .map(account -> (Integer.parseInt(account.getAccountNumber())) + 1 + "")
+                .map(account -> String.valueOf((Integer.parseInt(account.getAccountNumber())) + 1))
                 .orElse(createRandomAccountNumber());
 
         //새로 생성한 계좌 번호가 이미 사용하고 있는 번호이면 에러 처리
         if (accountRepository.findByAccountNumber(newAccountNumber).isPresent()) {
             throw new AccountException(ACCOUNT_NUMBER_ALREADY_USE);
         }
+
         return newAccountNumber;
     }
 
